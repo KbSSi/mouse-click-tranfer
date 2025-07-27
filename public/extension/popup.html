@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Transfer & Translator</title>
+  <style>
+    body {
+      width: 350px;
+      min-height: 400px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0 0 8px 0;
+      color: #333;
+    }
+
+    .header p {
+      font-size: 12px;
+      color: #666;
+      margin: 0;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px 12px;
+      text-align: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      color: #666;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      color: #1976d2;
+      border-bottom: 2px solid #1976d2;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #1565c0;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+    .result.success {
+      background: #e8f5e8;
+      color: #2e7d32;
+    }
+
+    .result.error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .settings-item {
+      margin-bottom: 16px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .status {
+      text-align: center;
+      padding: 8px;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Time Transfer & Translator</h1>
+      <p>时间戳转换 & 文本翻译</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="timestamp">时间戳</button>
+      <button class="tab" data-tab="translation">翻译</button>
+      <button class="tab" data-tab="settings">设置</button>
+    </div>
+
+    <div id="timestamp" class="tab-content active">
+      <div class="form-group">
+        <label for="timestampInput">输入时间戳</label>
+        <input type="text" id="timestampInput" placeholder="例: 1640995200">
+      </div>
+      <button class="btn" id="convertBtn">转换</button>
+      <div id="timestampResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div id="translation" class="tab-content">
+      <div class="form-group">
+        <label for="translationInput">输入要翻译的文本</label>
+        <input type="text" id="translationInput" placeholder="例: Hello World">
+      </div>
+      <button class="btn" id="translateBtn">翻译</button>
+      <div id="translationResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div id="settings" class="tab-content">
+      <div class="settings-item">
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableTimestamp" checked>
+          <label for="enableTimestamp">启用时间戳转换</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableTranslation" checked>
+          <label for="enableTranslation">启用文本翻译</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="timestampApiUrl">时间戳API地址</label>
+        <input type="url" id="timestampApiUrl" placeholder="https://api.example.com/timestamp">
+      </div>
+
+      <div class="form-group">
+        <label for="translationApiUrl">翻译API地址</label>
+        <input type="url" id="translationApiUrl" placeholder="https://api.example.com/translate">
+      </div>
+
+      <button class="btn" id="saveSettingsBtn">保存设置</button>
+    </div>
+
+    <div class="status">
+      <span id="statusText">就绪</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

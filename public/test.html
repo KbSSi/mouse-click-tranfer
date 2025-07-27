@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换和翻译插件测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .timestamp {
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            display: inline-block;
+            margin: 5px;
+        }
+        .text-sample {
+            background: #f3e5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .debug-info {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕐 时间戳转换和翻译插件测试页面</h1>
+
+    <div class="instructions">
+        <h2>📋 使用说明</h2>
+        <ol>
+            <li>选中下面的文本内容</li>
+            <li>右键点击选中的文本</li>
+            <li>功能选择框会出现在<strong>选中文本的右侧</strong>（如果右侧空间不够会显示在左侧）</li>
+            <li>在弹出的功能选择框中选择相应功能：
+                <ul>
+                    <li>🕐 时间戳转换 - 将时间戳转换为可读时间</li>
+                    <li>🌐 翻译文本 - 翻译选中的文本</li>
+                </ul>
+            </li>
+            <li>转换结果会以红色字体显示在<strong>选中文本的右侧</strong>（智能定位，避免超出屏幕）</li>
+        </ol>
+
+        <div class="debug-info">
+            <strong>🔧 调试步骤：</strong>
+            <ul style="margin: 5px 0;">
+                <li>打开浏览器开发者工具的控制台（F12）</li>
+                <li>选中时间戳，右键点击</li>
+                <li>点击"时间戳转换"，查看控制台输出</li>
+                <li>如果没有结果显示，请告诉我控制台的具体输出</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>⏰ 时间戳测试数据</h2>
+        <p>请选中下面的时间戳，然后右键选择"时间戳转换"：</p>
+
+        <p>10位时间戳（秒）：<span class="timestamp">1640995200</span></p>
+        <p>13位时间戳（毫秒）：<span class="timestamp">1640995200000</span></p>
+        <p>当前时间戳：<span class="timestamp" id="current-timestamp"></span></p>
+        <p>无效时间戳：<span class="timestamp">abc123</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>🌐 翻译测试数据</h2>
+        <p>请选中下面的文本，然后右键选择"翻译文本"：</p>
+
+        <p>英文文本：<span class="text-sample">Hello World</span></p>
+        <p>中文文本：<span class="text-sample">你好世界</span></p>
+        <p>长文本：<span class="text-sample">This is a longer text for translation testing purposes.</span></p>
+    </div>
+
+    <script>
+        // 显示当前时间戳
+        document.getElementById('current-timestamp').textContent = Math.floor(Date.now() / 1000);
+
+        // 添加调试信息
+        console.log('测试页面已加载，插件应该已经注入');
+
+        // 监听选择变化
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (selection.toString().trim()) {
+                console.log('文本已选中:', selection.toString().trim());
+            }
+        });
+    </script>
+</body>
+</html>

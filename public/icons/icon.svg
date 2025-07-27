@@ -1,0 +1,23 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="64" cy="64" r="60" fill="#4F46E5" stroke="#3730A3" stroke-width="2"/>
+
+  <!-- 时钟图标 -->
+  <circle cx="45" cy="45" r="18" fill="white" opacity="0.9"/>
+  <circle cx="45" cy="45" r="2" fill="#4F46E5"/>
+  <line x1="45" y1="45" x2="45" y2="35" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"/>
+  <line x1="45" y1="45" x2="52" y2="45" stroke="#4F46E5" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- 翻译图标 -->
+  <rect x="70" y="70" width="25" height="18" rx="2" fill="white" opacity="0.9"/>
+  <text x="82.5" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#4F46E5" font-weight="bold">Aa</text>
+
+  <!-- 连接线 -->
+  <path d="M 55 55 Q 64 64 75 75" stroke="white" stroke-width="2" fill="none" opacity="0.7"/>
+
+  <!-- 装饰性元素 -->
+  <circle cx="25" cy="25" r="3" fill="white" opacity="0.6"/>
+  <circle cx="103" cy="25" r="3" fill="white" opacity="0.6"/>
+  <circle cx="25" cy="103" r="3" fill="white" opacity="0.6"/>
+  <circle cx="103" cy="103" r="3" fill="white" opacity="0.6"/>
+</svg>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Transfer & Translator - 演示页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .demo-section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .timestamp {
+            background: #d4edda;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .english-text {
+            background: #cce5ff;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .instructions {
+            background: #fff;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Transfer & Translator 演示页面</h1>
+    <p>这个页面用于测试 Chrome 插件的功能。请确保已经安装并启用了插件。</p>
+
+    <div class="demo-section">
+        <h2>🕒 时间戳转换测试</h2>
+        <div class="instructions">
+            <strong>操作步骤：</strong>
+            <ol>
+                <li>用鼠标选中下面的时间戳</li>
+                <li>点击鼠标左键</li>
+                <li>查看转换结果</li>
+            </ol>
+        </div>
+        <p>当前时间戳（秒级）: <span class="timestamp">1640995200</span></p>
+        <p>当前时间戳（毫秒级）: <span class="timestamp">1640995200000</span></p>
+        <p>另一个时间戳: <span class="timestamp">1609459200</span></p>
+        <p>最新时间戳: <span class="timestamp">1704067200</span></p>
+    </div>
+
+    <div class="demo-section">
+        <h2>🌐 文本翻译测试</h2>
+        <div class="instructions">
+            <strong>操作步骤：</strong>
+            <ol>
+                <li>用鼠标选中下面的英文文本</li>
+                <li>点击鼠标右键</li>
+                <li>查看翻译结果</li>
+            </ol>
+        </div>
+        <p>简单问候: <span class="english-text">Hello World</span></p>
+        <p>常用短语: <span class="english-text">Good morning</span></p>
+        <p>技术术语: <span class="english-text">Chrome Extension</span></p>
+        <p>长句测试: <span class="english-text">This is a Chrome extension for timestamp conversion and text translation.</span></p>
+        <p>编程相关: <span class="english-text">JavaScript is a programming language</span></p>
+    </div>
+
+    <div class="demo-section">
+        <h2>📝 混合内容测试</h2>
+        <p>这里包含了时间戳和英文文本的混合内容：</p>
+        <p>网站创建时间: <span class="timestamp">1577836800</span></p>
+        <p>欢迎消息: <span class="english-text">Welcome to our website</span></p>
+        <p>最后更新: <span class="timestamp">1704067200</span></p>
+        <p>状态信息: <span class="english-text">System is running normally</span></p>
+    </div>
+
+    <div class="demo-section">
+        <h2>⚙️ 插件设置</h2>
+        <div class="instructions">
+            <strong>配置插件：</strong>
+            <ol>
+                <li>点击浏览器工具栏中的插件图标</li>
+                <li>在弹窗中切换到"设置"标签页</li>
+                <li>配置时间戳转换和翻译 API 地址</li>
+                <li>保存设置</li>
+            </ol>
+        </div>
+        <p>默认情况下，插件使用内置的转换和模拟翻译功能。</p>
+        <p>你可以配置自己的 API 来获得更好的翻译效果。</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>🔧 故障排除</h2>
+        <p><strong>如果插件不工作，请检查：</strong></p>
+        <ul>
+            <li>插件是否已正确安装并启用</li>
+            <li>是否在 chrome://extensions/ 页面开启了"开发者模式"</li>
+            <li>页面是否已刷新（安装插件后需要刷新页面）</li>
+            <li>浏览器控制台是否有错误信息</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #666;">
+        <p>Time Transfer & Translator Chrome Extension Demo</p>
+        <p>基于 Next.js + TypeScript 开发</p>
+    </footer>
+</body>
+</html>

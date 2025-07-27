@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Next.js Application
+
+## Project
+
+- Next.js TypeScript application using App Router.
+- Component development with React.
+- Use Tailwind CSS for styling design.
+- Use Shadcn UI components.
+- Use React Context for state management.
+- Use next-intl for internationalization.
+
+## Rules
+
+- Implement type safety using TypeScript.
+- Follow React best practices and hooks.
+- Achieve responsive design using Tailwind CSS and Shadcn UI.
+- Maintain a consistent internationalization structure.
+- Maintain the modularity and reusability of components.
+- Use correct type definitions for components and data.
