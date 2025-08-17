@@ -18,6 +18,9 @@ const extensionSrc = path.join(__dirname, '../public/extension');
 if (fs.existsSync(extensionSrc)) {
   const extensionFiles = fs.readdirSync(extensionSrc);
   extensionFiles.forEach(file => {
+    // 排除 dify-api.js 文件
+    if (file === 'dify-api.js') return;
+    
     const srcFile = path.join(extensionSrc, file);
     const destFile = path.join(outDir, file);
     if (fs.statSync(srcFile).isFile()) {

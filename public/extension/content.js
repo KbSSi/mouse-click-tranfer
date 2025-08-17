@@ -255,12 +255,12 @@ function showContextMenu() {
         // 计算菜单位置：在选中文本的右侧
         const menuWidth = 160;
         const menuHeight = 80;
-        let x = rect.right + 10; // 在选中文本右侧10px处
+        let x = rect.right + 10 + window.scrollX; // 添加 scrollX
         let y = rect.top + window.scrollY;
 
         // 确保菜单不会超出屏幕右边界
-        if (x + menuWidth > window.innerWidth) {
-          x = rect.left - menuWidth - 10; // 如果右侧空间不够，显示在左侧
+        if (x + menuWidth > window.innerWidth + window.scrollX) {
+          x = rect.left + window.scrollX - menuWidth - 10; // 如果右侧空间不够，显示在左侧
         }
 
         // 确保菜单不会超出屏幕下边界
@@ -323,12 +323,12 @@ function showResult(text) {
         // 计算结果框位置：在选中文本的右侧
         const displayWidth = 400;
         const displayHeight = 60;
-        let x = savedSelectionRect.right + 10; // 在选中文本右侧10px处
+        let x = savedSelectionRect.right + 10 + window.scrollX; // 添加 scrollX
         let y = savedSelectionRect.top + window.scrollY;
 
         // 确保结果框不会超出屏幕右边界
-        if (x + displayWidth > window.innerWidth) {
-          x = savedSelectionRect.left - displayWidth - 10; // 如果右侧空间不够，显示在左侧
+        if (x + displayWidth > window.innerWidth + window.scrollX) {
+          x = savedSelectionRect.left + window.scrollX - displayWidth - 10; // 如果右侧空间不够，显示在左侧
         }
 
         // 确保结果框不会超出屏幕下边界
@@ -349,7 +349,7 @@ function showResult(text) {
         resultDisplay.style.top = y + 'px';
       } else {
         // 如果无法获取选中文本位置，使用屏幕中央
-        resultDisplay.style.left = (window.innerWidth / 2 - 200) + 'px';
+        resultDisplay.style.left = (window.innerWidth / 2 - 200 + window.scrollX) + 'px';
         resultDisplay.style.top = (window.innerHeight / 2 + window.scrollY) + 'px';
       }
 
@@ -385,109 +385,11 @@ function hideResult() {
 // 检查是否为时间戳
 function isTimestamp(text) {
   const trimmed = text.trim();
-  return /^\d{10}$/.test(trimmed) || /^\d{13}$/.test(trimmed);
-}
-
-// 本地时间戳转换
-function convertTimestampLocally(timestamp) {
-  try {
-    const num = parseInt(timestamp);
-    const date = new Date(timestamp.length === 10 ? num * 1000 : num);
-    return date.toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  } catch (error) {
-    return '转换失败';
-  }
-}
-
-// 调用时间戳转换
-async function callTimestampAPI(timestamp) {
-  try {
-    // 首先尝试通过扩展后台脚本
-    if (isExtensionValid) {
-      const response = await sendMessageSafely({
-        action: 'convertTimestamp',
-        timestamp: timestamp
-      });
-
-      if (response && response.success) {
-        return response.result;
-      }
-    }
-
-    // 降级到本地转换
-    return convertTimestampLocally(timestamp);
-  } catch (error) {
-    console.warn('Timestamp conversion failed:', error);
-    return convertTimestampLocally(timestamp);
-  }
-}
-
-// 调用翻译API
-async function callTranslationAPI(text) {
-  try {
-    // 首先尝试通过扩展后台脚本
-    if (isExtensionValid) {
-      const response = await sendMessageSafely({
-        action: 'translateText',
-        text: text
-      });
-
-      if (response && response.success) {
-        return response.result;
-      }
-    }
-
-    // 降级到本地模拟翻译
-    return `翻译: ${text} (本地模拟)`;
-  } catch (error) {
-    console.warn('Translation failed:', error);
-    return `翻译: ${text} (本地模拟)`;
-  }
-}
-
-// 处理时间戳转换
-async function handleTimestampConversion() {
-  try {
-    console.log('handleTimestampConversion called, selectedText:', selectedText);
-
-    if (!selectedText || !isTimestamp(selectedText)) {
-      showResult('所选文本不是有效的时间戳');
-      return;
-    }
-
-    const result = await callTimestampAPI(selectedText);
-    console.log('Timestamp conversion result:', result);
-    showResult(`时间戳转换结果: ${result}`);
-  } catch (error) {
-    console.warn('Timestamp conversion handling failed:', error);
-    showResult('时间戳转换失败');
-  }
-}
-
-// 处理翻译
-async function handleTranslation() {
-  try {
-    console.log('handleTranslation called, selectedText:', selectedText);
-
-    if (!selectedText) {
-      showResult('没有选中的文本');
-      return;
-    }
-
-    const result = await callTranslationAPI(selectedText);
-    console.log('Translation result:', result);
-    showResult(`翻译结果: ${result}`);
-  } catch (error) {
-    console.warn('Translation handling failed:', error);
-    showResult('翻译失败');
-  }
+  // 添加调试日志
+  console.log('Checking if text is timestamp:', trimmed);
+  const result = /^\d{10}$/.test(trimmed) || /^\d{13}$/.test(trimmed);
+  console.log('Is timestamp result:', result);
+  return result;
 }
 
 // 处理文本选择（带防抖）
@@ -514,6 +416,7 @@ function handleTextSelection() {
           const x = rect.left + rect.width / 2;
           const y = rect.top + window.scrollY;
 
+          // 无论是否为时间戳，都显示功能提示
           showTooltip(x, y, '右键选择功能');
         }
         // 如果新选择的文本为空，但之前有选择，则清除状态
@@ -649,4 +552,119 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', addEventListeners);
 } else {
   addEventListeners();
+}
+
+// 本地时间戳转换
+function convertTimestampLocally(timestamp) {
+  try {
+    const num = parseInt(timestamp);
+    const date = new Date(timestamp.length === 10 ? num * 1000 : num);
+    return date.toLocaleString('zh-CN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  } catch (error) {
+    return '转换失败';
+  }
+}
+
+// 调用时间戳转换
+async function callTimestampAPI(timestamp) {
+  try {
+    // 首先尝试通过扩展后台脚本
+    if (isExtensionValid) {
+      const response = await sendMessageSafely({
+        action: 'convertTimestamp',
+        timestamp: timestamp
+      });
+
+      if (response && response.success) {
+        return response.result;
+      }
+    }
+
+    // 降级到本地转换
+    return convertTimestampLocally(timestamp);
+  } catch (error) {
+    console.warn('Timestamp conversion failed:', error);
+    return convertTimestampLocally(timestamp);
+  }
+}
+
+// 调用翻译API
+async function callTranslationAPI(text) {
+  try {
+    // 首先尝试通过扩展后台脚本
+    if (isExtensionValid) {
+      const response = await sendMessageSafely({
+        action: 'translateText',
+        text: text
+      });
+
+      if (response && response.success) {
+        return response.result;
+      }
+    }
+
+    // 降级到本地模拟翻译
+    return `翻译: ${text} (本地模拟)`;
+  } catch (error) {
+    console.warn('Translation failed:', error);
+    return `翻译: ${text} (本地模拟)`;
+  }
+}
+
+// 处理时间戳转换
+async function handleTimestampConversion() {
+  try {
+    console.log('handleTimestampConversion called, selectedText:', selectedText);
+
+    if (!selectedText || !isTimestamp(selectedText)) {
+      showResult('所选文本不是有效的时间戳');
+      return;
+    }
+
+    const result = await callTimestampAPI(selectedText);
+    console.log('Timestamp conversion result:', result);
+    showResult(`时间戳转换结果: ${result}`);
+  } catch (error) {
+    console.warn('Timestamp conversion handling failed:', error);
+    showResult('时间戳转换失败');
+  }
+}
+
+// 处理翻译
+async function handleTranslation() {
+  try {
+    console.log('handleTranslation called, selectedText:', selectedText);
+
+    if (!selectedText) {
+      showResult('没有选中的文本');
+      return;
+    }
+
+    // 显示加载状态
+    showResult('翻译中...');
+
+    const result = await callTranslationAPI(selectedText);
+    console.log('Translation result:', result);
+    
+    // 根据结果类型显示不同内容
+    if (result && typeof result === 'object') {
+      if (result.status === 'error') {
+        showResult(`翻译失败: ${result.message}`);
+      } else {
+        showResult(`翻译结果: ${result}`);
+      }
+    } else {
+      showResult(`翻译结果: ${result}`);
+    }
+  } catch (error) {
+    console.warn('Translation handling failed:', error);
+    showResult(`翻译失败: ${error.message}`);
+  }
 }

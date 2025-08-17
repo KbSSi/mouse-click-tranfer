@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Time Transfer & Translator",
+  "name": "Time && Language Translator",
   "version": "1.0.0",
-  "description": "Mouse selection for timestamp conversion and translation",
+  "description": "Mouse selection for timestamp conversion and language translation",
   "permissions": [
     "storage"
   ],

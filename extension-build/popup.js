@@ -97,10 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusText = document.getElementById('statusText');
 
     const settings = {
-      enableTimestamp: document.getElementById('enableTimestamp').checked,
-      enableTranslation: document.getElementById('enableTranslation').checked,
-      timestampApiUrl: document.getElementById('timestampApiUrl').value.trim(),
-      translationApiUrl: document.getElementById('translationApiUrl').value.trim()
+      sourceLanguage: document.getElementById('sourceLanguage').value,
+      targetLanguage: document.getElementById('targetLanguage').value
     };
 
     btn.disabled = true;
@@ -136,16 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
   async function loadSettings() {
     try {
       const settings = await chrome.storage.sync.get([
-        'enableTimestamp',
-        'enableTranslation',
-        'timestampApiUrl',
-        'translationApiUrl'
+        'sourceLanguage',
+        'targetLanguage'
       ]);
 
-      document.getElementById('enableTimestamp').checked = settings.enableTimestamp !== false;
-      document.getElementById('enableTranslation').checked = settings.enableTranslation !== false;
-      document.getElementById('timestampApiUrl').value = settings.timestampApiUrl || '';
-      document.getElementById('translationApiUrl').value = settings.translationApiUrl || '';
+      document.getElementById('sourceLanguage').value = settings.sourceLanguage || 'auto';
+      document.getElementById('targetLanguage').value = settings.targetLanguage || 'en';
     } catch (error) {
       console.error('加载设置失败:', error);
     }
