@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Time && Language Translator",
+  "name": "Time Transfer",
   "version": "1.0.0",
-  "description": "Mouse selection for timestamp conversion and language translation",
+  "description": "时间戳转换和语言翻译",
   "permissions": [
     "storage"
   ],
@@ -18,7 +18,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Time Transfer & Translator"
+    "default_title": "Time Transfer"
   },
   "icons": {
     "16": "icons/icon16.png",

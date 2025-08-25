@@ -4,16 +4,15 @@ console.log('Time Transfer & Translator Service Worker 启动');
 // Dify API 工具函数
 /**
  * 运行工作流
- * @param {string} apiKey - Dify API密钥
  * @param {string} user - 用户标识
  * @param {Object} input - 输入参数
  * @param {string} responseMode - 响应模式
  * @returns {Promise<Object>} 工作流执行结果
  */
-async function runWorkflow(apiKey, user, input, responseMode = 'blocking') {
+async function runWorkflow(user, input, responseMode = 'blocking') {
   const workflowUrl = 'https://api.dify.ai/v1/workflows/run';
   const headers = {
-    'Authorization': `Bearer ${apiKey}`,
+    'Authorization': 'Bearer app-qtDTbx9mMEOZEzOVCFMrHe5Z', // 从 tsconfig.json 获取的 app-key
     'Content-Type': 'application/json'
   };
 
@@ -24,7 +23,7 @@ async function runWorkflow(apiKey, user, input, responseMode = 'blocking') {
   };
 
   try {
-    console.log('运行工作流...', data);
+    console.log('运行工作流...');
     const response = await fetch(workflowUrl, {
       method: 'POST',
       headers: headers,
@@ -40,17 +39,7 @@ async function runWorkflow(apiKey, user, input, responseMode = 'blocking') {
       return responseData.data?.outputs?.out || responseData;
     } else {
       console.log(`工作流执行失败，状态码: ${response.status}`);
-      const errorText = await response.text();
-      let errorMessage = `Failed to execute workflow, status code: ${response.status}`;
-      
-      try {
-        const errorData = JSON.parse(errorText);
-        errorMessage = errorData.message || errorData.error || errorMessage;
-      } catch (parseError) {
-        console.log('解析错误响应失败:', parseError);
-      }
-      
-      return { status: 'error', message: errorMessage, response: errorText };
+      return { status: 'error', message: `Failed to execute workflow, status code: ${response.status}`, response: await response.json() };
     }
   } catch (error) {
     console.log(`发生错误: ${error.message}`);
@@ -81,38 +70,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.action === 'translateText') {
     try {
-      // 获取语言设置和API密钥
-      chrome.storage.sync.get(['sourceLanguage', 'targetLanguage', 'apiKey'], (settings) => {
+      // 获取语言设置
+      chrome.storage.sync.get(['sourceLanguage', 'targetLanguage'], (settings) => {
         const sourceLang = settings.sourceLanguage || 'auto';
         const targetLang = settings.targetLanguage || 'en';
-        const apiKey = settings.apiKey;
-        
-        // 检查API密钥
-        if (!apiKey) {
-          sendResponse({ success: false, error: 'API密钥未设置，请在扩展设置中配置API密钥' });
-          return;
-        }
         
         // 调用 Dify 工作流
-        runWorkflow(apiKey, 'time-transfer-user', {
+        runWorkflow('time-transfer-user', {
           source_language: sourceLang,
           target_language: targetLang,
           input: request.text
         }).then(difyResponse => {
-          // 检查响应是否为错误
-          if (difyResponse && typeof difyResponse === 'object' && difyResponse.status === 'error') {
-            sendResponse({ success: false, error: difyResponse.message });
-          } else {
-            sendResponse({ success: true, result: difyResponse });
-          }
-        }).catch(error => {
-          console.error('工作流执行异常:', error);
-          sendResponse({ success: false, error: error.message });
+          sendResponse({ success: true, result: difyResponse });
         });
         
       });
     } catch (error) {
-      console.error('处理翻译请求时发生错误:', error);
       sendResponse({ success: false, error: error.message });
     }
     return true;
